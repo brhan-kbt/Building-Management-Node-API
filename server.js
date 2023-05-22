@@ -11,6 +11,10 @@ import clientRoutes from "./routes/client.js"
 import generalRoutes from "./routes/general.js"
 import managementRoutes from "./routes/management.js"
 import salesRoutes from "./routes/sales.js"
+import userRoutes from "./routes/user2.js"
+import buildingRoutes from "./routes/building.js"
+import floorRoutes from "./routes/floor.js"
+import unitRoutes from "./routes/unit.js"
 
 // Set up bodyParser and other middleware
 // CONFIGURATION
@@ -22,14 +26,25 @@ app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({policy:"cross-origin"}));
 app.use(morgan('common'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(cors());
-// ROUTES
 
+
+// data imports
+// import User from './models/User.js';
+import {dataProduct, dataProductStat, dataUser, userData2} from './data/index.js';
+import Product from './models/Product.js';
+import ProductStat from './models/ProductStat.js';
+import User2 from './models/User2.js';
+// ROUTES
 app.use("/client",clientRoutes);
 app.use("/general",generalRoutes);
 app.use("/management",managementRoutes);
 app.use("/sales",salesRoutes);
+app.use("/users",userRoutes);
+app.use("/building",buildingRoutes);
+app.use("/floor",floorRoutes);
+app.use("/unit",unitRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello, world!');
@@ -95,7 +110,10 @@ mongoose.connect(process.env.MONGO_URL,{
 }).then(()=>{
     app.listen(PORT,()=>console.log(`Server running on port: ${PORT}
     http://localhost:5000/api-docs/
-    `))
+    `));
+      // User2.insertMany(userData2);
+      // Product.insertMany(dataProduct);
+      // ProductStat.insertMany(dataProductStat);
 }).catch((error)=>{
     console.log(`${error} Didn't connect!`);
 })
